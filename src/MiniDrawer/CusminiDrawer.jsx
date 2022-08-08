@@ -12,16 +12,22 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
+// import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import PersonIcon from "@mui/icons-material/Person";
-import GavelIcon from "@mui/icons-material/Gavel";
-import SchemaIcon from "@mui/icons-material/Schema";
+// import PersonIcon from "@mui/icons-material/Person";
+// import GavelIcon from "@mui/icons-material/Gavel";
+// import SchemaIcon from "@mui/icons-material/Schema";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import ProfileMenu from "../AppBar/ProfileMenu";
+// import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import { Collapse } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Menu } from "./Menu";
+import { hasChildren } from "./Utils";
 
 const drawerWidth = 240;
 
@@ -40,8 +46,8 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  marginLeft: 24,
-  marginRight: 36,
+  /*marginLeft: 24,
+  marginRight: 36,*/
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
@@ -104,33 +110,60 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  const itemsList = [
-    {
-      text: "User Management",
-      icon: <PersonIcon />,
-    },
-    {
-      text: "Contractor Management",
-      icon: <GavelIcon />,
-    },
-    {
-      text: "Scheme Creation",
-      icon: <SchemaIcon />,
-    },
-  ];
+  const MenuItem = (props) => {
+    const { item } = props;
+    const SelectComponent = hasChildren(item) ? MultiLevel : SingleLevel;
+    return <SelectComponent item={item} />;
+  };
+
+  const SingleLevel = (props) => {
+    const { item } = props;
+    return (
+      <ListItem button>
+        <ListItemIcon>{item.icon}</ListItemIcon>
+        <ListItemText primary={item.text} sx={{ ml : open ? -2 : null }} />
+      </ListItem>
+    );
+  };
+
+  const MultiLevel = ({ item }) => {
+    const { items: children } = item;
+    const [submenuOpen, setsubmenuOpen] = React.useState(false);
+
+    const handleClick = () => {
+      setsubmenuOpen((prev) => !prev);
+    };
+
+    return (
+      <React.Fragment>
+        <ListItem button onClick={handleClick}>
+          <ListItemIcon>{item.icon}</ListItemIcon>
+          <ListItemText primary={item.text} sx={{ ml : open ? -2 : null }} />
+          {submenuOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </ListItem>
+        <Collapse in={submenuOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding sx={{ ml: open ? 0.5 : null }}>
+            {children.map((child, key) => (
+              <MenuItem key={key} item={child} />
+            ))}
+          </List>
+        </Collapse>
+      </React.Fragment>
+    );
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar variant="dense">
+        <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
-              ml: 0,
+              ml: -1.5,
               ...(open && { display: "none" }),
             }}
           >
@@ -164,35 +197,9 @@ export default function MiniDrawer() {
             )}
           </IconButton>
         </DrawerHeader>
-        <List sx={{ m: -2.5 }}>
-          {itemsList.map((item, index) => {
-            const { text, icon } = item;
-            return (
-              <ListItem key={index} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <Tooltip title={item.text} placement="right-start" arrow>
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? -3 : "auto",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                    </ListItemIcon>
-                  </Tooltip>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
+       {Menu.map((item, key) => (
+          <MenuItem key={key} item={item} />
+        ))}
       </Drawer>
       <Box component="main" m={-1} sx={{ p: 2 }}>
         <DrawerHeader />
