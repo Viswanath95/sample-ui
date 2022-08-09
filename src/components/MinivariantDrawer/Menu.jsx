@@ -10,33 +10,40 @@ import BloodtypeIcon from '@mui/icons-material/Bloodtype';
 export const Menu = [
     {
         text: "User Management",
+        path: 'usermanagement',
         icon: <PersonIcon />,
         items: [],
       },
       {
         text: "Contractor Management",
+        path: 'contractormanagement',
         icon: <GavelIcon />,
         items: [],
       },
       {
         text: "Scheme Creation",
+        path: 'schemecreation',
         icon: <SchemaIcon />,
         items: [],
       },
       {
         text: "Sub Menu",
+        path: 'submenu',
         icon: <MenuOpenIcon />,
         items: [
           {
             text: "Sub Menu1",
+            path: 'submenuone',
             icon: <BeachAccessIcon />
           },
           {
             text: "Sub Menu2",
+            path: 'submenutwo',
             icon: <BikeScooterIcon />
           },
           {
             text: "Sub Menu3",
+            path: 'submenuthree',
             icon: <BloodtypeIcon />
           }
         ]

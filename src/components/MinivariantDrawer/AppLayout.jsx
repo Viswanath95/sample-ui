@@ -1,5 +1,8 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
+import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import UserManagement from "../UserManagement/UserManagement";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -12,17 +15,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
-// import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-// import PersonIcon from "@mui/icons-material/Person";
-// import GavelIcon from "@mui/icons-material/Gavel";
-// import SchemaIcon from "@mui/icons-material/Schema";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import ProfileMenu from "../AppBar/ProfileMenu";
-// import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import { Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -46,8 +44,6 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  /*marginLeft: 24,
-  marginRight: 36,*/
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
@@ -87,7 +83,7 @@ const Drawer = styled(MuiDrawer, {
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
-  // boxSizing: 'border-box',
+  boxSizing: 'border-box',
   ...(open && {
     ...openedMixin(theme),
     "& .MuiDrawer-paper": openedMixin(theme),
@@ -98,9 +94,10 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer() {
+export default function AppLayout() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  let navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -119,26 +116,52 @@ export default function MiniDrawer() {
   const SingleLevel = (props) => {
     const { item } = props;
     return (
-      <ListItem button>
-        <ListItemIcon>{item.icon}</ListItemIcon>
-        <ListItemText primary={item.text} sx={{ ml : open ? -2 : null }} />
+      <ListItem
+        button onClick={ () =>  {
+          navigate(`/applayout/${item.path}`)
+      }}
+        sx={{
+          "&:hover": {
+            backgroundColor: "#4DA8DB",
+            color: "#F8F8FF",
+          },
+        }}
+      >
+          <Tooltip title={item.text} placement="right-start" arrow>
+          <ListItemIcon sx={{ "&:hover": { color: "#F8F8FF" } }}>
+            {item.icon}
+          </ListItemIcon>
+        </Tooltip>
+        <ListItemText primary={item.text} sx={{ ml: open ? -2 : null }} />
       </ListItem>
     );
   };
 
   const MultiLevel = ({ item }) => {
     const { items: children } = item;
-    const [submenuOpen, setsubmenuOpen] = React.useState(false);
+    const [submenuOpen, setsubmenuOpen] = useState(false);
 
     const handleClick = () => {
-      setsubmenuOpen((prev) => !prev);
+     setsubmenuOpen((prev) => !prev);
     };
-
     return (
       <React.Fragment>
-        <ListItem button onClick={handleClick}>
-          <ListItemIcon>{item.icon}</ListItemIcon>
-          <ListItemText primary={item.text} sx={{ ml : open ? -2 : null }} />
+        <ListItem
+          button
+          onClick={handleClick}
+          sx={{
+            "&:hover": {
+              backgroundColor: "#4DA8DB",
+              color: "#F8F8FF",
+            },
+          }}
+        >
+          <Tooltip title={item.text} placement="right-start" arrow>
+            <ListItemIcon sx={{ "&:hover": { color: "#F8F8FF" } }}>
+              {item.icon}
+            </ListItemIcon>
+          </Tooltip>
+          <ListItemText primary={item.text} sx={{ ml: open ? -2 : null }} />
           {submenuOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </ListItem>
         <Collapse in={submenuOpen} timeout="auto" unmountOnExit>
@@ -153,10 +176,12 @@ export default function MiniDrawer() {
   };
 
   return (
+    <>
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} sx={{ bgcolor: "#4682B4" }}>
         <Toolbar>
+          <Tooltip title="Open Drawer" arrow>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -169,6 +194,7 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
+          </Tooltip>
           <Box flexGrow={1} />
           <Box mr={1}>
             <Tooltip title="Notification" arrow>
@@ -184,44 +210,48 @@ export default function MiniDrawer() {
           <ProfileMenu />
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+        variant="permanent"
+        open={open}
+        PaperProps={{
+          sx: {
+            backgroundColor: "#FFFAFA",
+            borderRadius: 5,
+            boxShadow: 4,
+            color: "black",
+          },
+        }}
+      >
         <DrawerHeader>
           <Typography variant="subtitle2" sx={{ mr: 12 }}>
             TWADPMS
           </Typography>
-          <IconButton onClick={handleDrawerClose}>
+          <Tooltip title="Close Drawer" arrow>
+          <IconButton
+            onClick={handleDrawerClose}
+            sx={{ "&:hover": { backgroundColor: "#4DA8DB", color: "#F8F8FF" } }}
+          >
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
             ) : (
               <ChevronLeftIcon />
             )}
           </IconButton>
+          </Tooltip>
         </DrawerHeader>
-       {Menu.map((item, key) => (
+        {Menu.map((item, key) => (
           <MenuItem key={key} item={item} />
         ))}
       </Drawer>
       <Box component="main" m={-1} sx={{ p: 2 }}>
         <DrawerHeader />
         <Stack spacing={2}>
-          <Typography variant="h6">UserManagement</Typography>
-          <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-            ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-            elementum integer enim neque volutpat ac tincidunt. Ornare
-            suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-            volutpat consequat mauris. Elementum eu facilisis sed odio morbi.
-            Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt
-            ornare massa eget egestas purus viverra accumsan in. In hendrerit
-            gravida rutrum quisque non tellus orci ac. Pellentesque nec nam
-            aliquam sem et tortor. Habitant morbi tristique senectus et.
-            Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean
-            euismod elementum nisi quis eleifend. Commodo viverra maecenas
-            accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-            ultrices sagittis orci a.
-          </Typography>
+          <Typography variant="h6">App Layout</Typography>
+          <UserManagement />
         </Stack>
       </Box>
     </Box>
+    <Outlet />
+    </>
   );
 }
