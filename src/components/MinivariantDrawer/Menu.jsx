@@ -1,51 +1,53 @@
 import React from "react";
-import PersonIcon from "@mui/icons-material/Person";
-import GavelIcon from "@mui/icons-material/Gavel";
-import SchemaIcon from "@mui/icons-material/Schema";
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import BikeScooterIcon from '@mui/icons-material/BikeScooter';
-import BloodtypeIcon from '@mui/icons-material/Bloodtype';
+import {
+  Person,
+  Gavel,
+  Schema,
+  MenuOpen,
+  BeachAccess,
+  BikeScooter,
+  Bloodtype,
+} from "@mui/icons-material";
 
 export const Menu = [
-    {
-        text: "User Management",
-        path: 'usermanagement',
-        icon: <PersonIcon />,
-        items: [],
+  {
+    text: "User Management",
+    path: "usermanagement",
+    icon: <Person />,
+    items: [],
+  },
+  {
+    text: "Contractor Management",
+    path: "contractormanagement",
+    icon: <Gavel />,
+    items: [],
+  },
+  {
+    text: "Scheme Creation",
+    path: "schemecreation",
+    icon: <Schema />,
+    items: [],
+  },
+  {
+    text: "Sub Menu",
+    path: "submenu",
+    icon: <MenuOpen />,
+    items: [
+      {
+        text: "Sub Menu1",
+        path: "submenuone",
+        icon: <BeachAccess />,
       },
       {
-        text: "Contractor Management",
-        path: 'contractormanagement',
-        icon: <GavelIcon />,
-        items: [],
+        text: "Sub Menu2",
+        path: "submenutwo",
+        icon: <BikeScooter />,
       },
       {
-        text: "Scheme Creation",
-        path: 'schemecreation',
-        icon: <SchemaIcon />,
-        items: [],
+        text: "Sub Menu3",
+        path: "submenuthree",
+        icon: <Bloodtype />,
       },
-      {
-        text: "Sub Menu",
-        path: 'submenu',
-        icon: <MenuOpenIcon />,
-        items: [
-          {
-            text: "Sub Menu1",
-            path: 'submenuone',
-            icon: <BeachAccessIcon />
-          },
-          {
-            text: "Sub Menu2",
-            path: 'submenutwo',
-            icon: <BikeScooterIcon />
-          },
-          {
-            text: "Sub Menu3",
-            path: 'submenuthree',
-            icon: <BloodtypeIcon />
-          }
-        ]
-      }
+    ],
+  },
 ];

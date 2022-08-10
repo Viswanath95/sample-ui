@@ -3,9 +3,10 @@ import Typography from "@mui/material/Typography";
 
 function UserManagement() {
   return (
-      <div>
+        <div>
         <Typography variant="h6">UserManagement</Typography>
-      </div>
+        </div>
+      
   )
 }
 

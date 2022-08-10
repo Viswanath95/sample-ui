@@ -1,29 +1,31 @@
 import React, { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import { Outlet } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import UserManagement from "../UserManagement/UserManagement";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
+import { Outlet, useNavigate } from "react-router-dom";
 import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
+import MuiDrawer from "@mui/material/Drawer";
+import {
+  Box,
+  Toolbar,
+  List,
+  CssBaseline,
+  Typography,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Tooltip,
+  Collapse,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Stack from "@mui/material/Stack";
-import Tooltip from "@mui/material/Tooltip";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import {
+  ChevronLeft,
+  ChevronRight,
+  NotificationsActive,
+  ExpandMore,
+  ExpandLess,
+} from "@mui/icons-material";
 import ProfileMenu from "../AppBar/ProfileMenu";
-import { Collapse } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Menu } from "./Menu";
 import { hasChildren } from "./Utils";
 
@@ -83,7 +85,7 @@ const Drawer = styled(MuiDrawer, {
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
-  boxSizing: 'border-box',
+  boxSizing: "border-box",
   ...(open && {
     ...openedMixin(theme),
     "& .MuiDrawer-paper": openedMixin(theme),
@@ -117,9 +119,10 @@ export default function AppLayout() {
     const { item } = props;
     return (
       <ListItem
-        button onClick={ () =>  {
-          navigate(`/applayout/${item.path}`)
-      }}
+        button
+        onClick={() => {
+          navigate(`/applayout/${item.path}`);
+        }}
         sx={{
           "&:hover": {
             backgroundColor: "#4DA8DB",
@@ -127,7 +130,7 @@ export default function AppLayout() {
           },
         }}
       >
-          <Tooltip title={item.text} placement="right-start" arrow>
+        <Tooltip title={item.text} placement="right-start" arrow>
           <ListItemIcon sx={{ "&:hover": { color: "#F8F8FF" } }}>
             {item.icon}
           </ListItemIcon>
@@ -142,8 +145,10 @@ export default function AppLayout() {
     const [submenuOpen, setsubmenuOpen] = useState(false);
 
     const handleClick = () => {
-     setsubmenuOpen((prev) => !prev);
+      //  setsubmenuOpen((prev) => !prev);
+      setsubmenuOpen(!submenuOpen);
     };
+
     return (
       <React.Fragment>
         <ListItem
@@ -162,13 +167,20 @@ export default function AppLayout() {
             </ListItemIcon>
           </Tooltip>
           <ListItemText primary={item.text} sx={{ ml: open ? -2 : null }} />
-          {submenuOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          {submenuOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={submenuOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding sx={{ ml: open ? 0.5 : null }}>
-            {children.map((child, key) => (
-              <MenuItem key={key} item={child} />
-            ))}
+            {submenuOpen &&
+              children.map((child) => (
+                <div
+                  onClick={() => {
+                    navigate(`/applayout/submenu/${child.path}`);
+                  }}
+                >
+                  <MenuItem key={child} item={child} />
+                </div>
+              ))}
           </List>
         </Collapse>
       </React.Fragment>
@@ -177,81 +189,78 @@ export default function AppLayout() {
 
   return (
     <>
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ bgcolor: "#4682B4" }}>
-        <Toolbar>
-          <Tooltip title="Open Drawer" arrow>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              ml: -1.5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          </Tooltip>
-          <Box flexGrow={1} />
-          <Box mr={1}>
-            <Tooltip title="Notification" arrow>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open} sx={{ bgcolor: "#4682B4" }}>
+          <Toolbar>
+            <Tooltip title="Open Drawer" arrow>
               <IconButton
                 color="inherit"
-                aria-label="notification alert"
-                edge="end"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{
+                  ml: -1.5,
+                  ...(open && { display: "none" }),
+                }}
               >
-                <NotificationsActiveIcon />
+                <MenuIcon />
               </IconButton>
             </Tooltip>
-          </Box>
-          <ProfileMenu />
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        open={open}
-        PaperProps={{
-          sx: {
-            backgroundColor: "#FFFAFA",
-            borderRadius: 5,
-            boxShadow: 4,
-            color: "black",
-          },
-        }}
-      >
-        <DrawerHeader>
-          <Typography variant="subtitle2" sx={{ mr: 12 }}>
-            TWADPMS
-          </Typography>
-          <Tooltip title="Close Drawer" arrow>
-          <IconButton
-            onClick={handleDrawerClose}
-            sx={{ "&:hover": { backgroundColor: "#4DA8DB", color: "#F8F8FF" } }}
-          >
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-          </Tooltip>
-        </DrawerHeader>
-        {Menu.map((item, key) => (
-          <MenuItem key={key} item={item} />
-        ))}
-      </Drawer>
-      <Box component="main" m={-1} sx={{ p: 2 }}>
-        <DrawerHeader />
-        <Stack spacing={2}>
-          <Typography variant="h6">App Layout</Typography>
-          <UserManagement />
-        </Stack>
+            <Box flexGrow={1} />
+            <Box mr={1}>
+              <Tooltip title="Notification" arrow>
+                <IconButton
+                  color="inherit"
+                  aria-label="notification alert"
+                  edge="end"
+                >
+                  <NotificationsActive />
+                </IconButton>
+              </Tooltip>
+            </Box>
+            <ProfileMenu />
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          open={open}
+          PaperProps={{
+            sx: {
+              backgroundColor: "#FFFAFA",
+              borderRadius: 5,
+              boxShadow: 4,
+              color: "black",
+            },
+          }}
+        >
+          <DrawerHeader>
+            <Typography variant="subtitle2" sx={{ mr: 12 }}>
+              TWADPMS
+            </Typography>
+            <Tooltip title="Close Drawer" arrow>
+              <IconButton
+                onClick={handleDrawerClose}
+                sx={{
+                  "&:hover": { backgroundColor: "#4DA8DB", color: "#F8F8FF" },
+                }}
+              >
+                {theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
+              </IconButton>
+            </Tooltip>
+          </DrawerHeader>
+          {Menu.map((item, key) => (
+            <MenuItem key={key} item={item} />
+          ))}
+        </Drawer>
+        <Box component="main" m={-1} sx={{ p: 2 }}>
+          <DrawerHeader />
+          <Stack spacing={2}>
+            <Typography variant="h6">App Layout</Typography>
+          </Stack>
+        </Box>
       </Box>
-    </Box>
-    <Outlet />
+      <Outlet />
     </>
   );
 }
