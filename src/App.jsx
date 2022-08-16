@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 import Login from "./components/Login/Login";
 import AppLayout from './components/MinivariantDrawer/AppLayout';
@@ -34,9 +34,18 @@ export const AppRoutes = () =>  {
           path: "submenu",
           element: <SubMenu/>,
           children: [
-            { path: "submenuone", element: <SubOne/> },
-            { path: "submenutwo", element: <SubTwo/> },
-            { path: "submenuthree", element: <SubThree/>}
+            { 
+              path: "submenuone", 
+              element: <SubOne/> 
+            },
+            { 
+              path: "submenutwo", 
+              element: <SubTwo/> 
+            },
+            { 
+              path: "submenuthree", 
+              element: <SubThree/>
+            }
           ],
         },
       ],
@@ -48,10 +57,9 @@ export const AppRoutes = () =>  {
 const App = () => {
   return(
     <Router>
-      <AppRoutes />
+     <AppRoutes />
     </Router>
   )
 }
 
 export default App;
-

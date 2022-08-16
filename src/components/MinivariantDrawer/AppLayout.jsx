@@ -28,6 +28,13 @@ import {
 import ProfileMenu from "../AppBar/ProfileMenu";
 import { Menu } from "./Menu";
 import { hasChildren } from "./Utils";
+// import UserManagement from "../UserManagement/UserManagement";
+// import ContractorManagement from "../ContractorManagement/ContractorManagement";
+// import SchemeCreation from "../SchemeCreation/SchemeCreation";
+// import SubMenu from "../SubMenu/SubMenu";
+// import SubOne from "../SubMenu/SubOne";
+// import SubTwo from "../SubMenu/SubTwo";
+// import SubThree from "../SubMenu/SubThree";
 
 const drawerWidth = 240;
 
@@ -149,7 +156,7 @@ export default function AppLayout() {
       setsubmenuOpen(!submenuOpen);
     };
 
-    return (
+  return (
       <React.Fragment>
         <ListItem
           button
@@ -255,9 +262,31 @@ export default function AppLayout() {
         </Drawer>
         <Box component="main" m={-1} sx={{ p: 2 }}>
           <DrawerHeader />
-          <Stack spacing={2}>
-            <Typography variant="h6">App Layout</Typography>
-          </Stack>
+          <Box component="content" sx={{ ml: open ? drawerWidth : 2 }}>
+            <Stack spacing={1}>
+           {/* <Typography component="user">
+                <UserManagement />
+              </Typography>
+                <Typography component="contract">
+                <ContractorManagement />
+              </Typography>
+              <Typography component="scheme">
+                <SchemeCreation />
+              </Typography>
+              <Typography component="submenu">
+                <SubMenu />
+              </Typography>
+              <Typography component="subone">
+                <SubOne />
+              </Typography>
+              <Typography component="subtwo">
+                <SubTwo />
+              </Typography>
+              <Typography component="subthree">
+                <SubThree />
+              </Typography>  */}
+            </Stack>
+          </Box>
         </Box>
       </Box>
       <Outlet />

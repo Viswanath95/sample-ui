@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 // import Stack from '@mui/material/Stack';
 import Badge from "@mui/material/Badge";
@@ -8,15 +9,17 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { green } from "@mui/material/colors";
+import Button  from "@mui/material/Button";
 import PersonIcon from "@mui/icons-material/Person";
 import PasswordIcon from "@mui/icons-material/Password";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 
 export default function ProfileMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const profmenuopen = Boolean(anchorEl);
-
+  let navigate = useNavigate();
+ 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -52,6 +55,12 @@ export default function ProfileMenu() {
       },
       children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
     };
+  }
+
+  const logOut = () => {
+    navigate("/");
+    sessionStorage.removeItem('Token');
+    sessionStorage.clear();
   }
 
   return (
@@ -164,7 +173,9 @@ export default function ProfileMenu() {
           <ListItemIcon sx={{ "&:hover": { color: "#F8F8FF" } }}>
             <Logout fontSize="small" />
           </ListItemIcon>
+          <Button onClick={logOut}>
           Logout
+          </Button>
         </MenuItem>
       </Menu>
     </React.Fragment>

@@ -1,11 +1,13 @@
 import React from 'react';
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 function UserManagement() {
   return (
-        <div>
+        <Box>
         <Typography variant="h6">UserManagement</Typography>
-        </div>
+        <Typography variant="h6">User</Typography>
+        </Box>
       
   )
 }
