@@ -28,7 +28,7 @@ import {
 import ProfileMenu from "../AppBar/ProfileMenu";
 import { Menu } from "./Menu";
 import { hasChildren } from "./Utils";
-// import UserManagement from "../UserManagement/UserManagement";
+import UserManagement from "../UserManagement/UserManagement";
 // import ContractorManagement from "../ContractorManagement/ContractorManagement";
 // import SchemeCreation from "../SchemeCreation/SchemeCreation";
 // import SubMenu from "../SubMenu/SubMenu";
@@ -242,7 +242,7 @@ export default function AppLayout() {
           }}
         >
           <DrawerHeader>
-            <Typography variant="subtitle2" sx={{ mr: 12 }}>
+            <Typography variant="h6" sx={{ mr: 4 }}>
               TWADPMS
             </Typography>
             <Tooltip title="Close Drawer" arrow>
@@ -264,10 +264,10 @@ export default function AppLayout() {
           <DrawerHeader />
           <Box component="content" sx={{ ml: open ? drawerWidth : 2 }}>
             <Stack spacing={1}>
-           {/* <Typography component="user">
+           <Typography component="user">
                 <UserManagement />
               </Typography>
-                <Typography component="contract">
+           {/*     <Typography component="contract">
                 <ContractorManagement />
               </Typography>
               <Typography component="scheme">

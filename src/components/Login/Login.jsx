@@ -1,8 +1,10 @@
-import React from 'react';
+import React from "react";
+import LoginStyles from "../Styles/Login.module.css";
+import twadimage from "../Images/twadlogo.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
-import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Link, TextField, Typography } from "@mui/material";
 
 const loginPageValidation = {
   usernameEmailError: {
@@ -11,31 +13,32 @@ const loginPageValidation = {
   passwordError: {
     required: "Password is required",
   },
-  // usernamepasswordIncorrect: {
-  //   required: "Please enter correct username and password",
-  // },
+  usernamepasswordInvalid: {
+    required: "Please enter valid username and password",
+  },
 };
 
 function Login() {
-  const { control, handleSubmit } = useForm({ defaultValues: {
-    username: "",
-    password:"",
-  }});
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
   let navigate = useNavigate();
 
   const onSubmit = (submitted) => {
-   console.log({ submitted });
+    console.log({ submitted });
 
-  axios({
+    axios({
       method: "post",
       url: `${process.env.REACT_APP_LOGIN_URL}`,
-      headers:{'Content-Type': 'application/json'},
+      headers: { "Content-Type": "application/json" },
       data: submitted,
-    })
-    .then(
+    }).then(
       (response) => {
-        console.log(response);
+        console.log(response.status);
         sessionStorage.setItem(
           "Token",
           response.data.tokenType + " " + response.data.accessToken
@@ -45,7 +48,6 @@ function Login() {
           response.data.accessToken === null
         ) {
           navigate("/");
-          
         } else {
           navigate("/applayout");
         }
@@ -54,114 +56,126 @@ function Login() {
         console.log(error);
       }
     );
-  }
- 
+  };
+
   return (
- 
-   <Box component="form" onSubmit={handleSubmit(onSubmit)}  
-  //  sx=
-  //      {{
-  //       //  m:25
-  //       margin: { xs: 25, sm: 25, md: 25, lg: 25, xl: 25 }
-  //      }}
-       
+    <div className={LoginStyles.Login}>
+      {/* login form left side */}
+      <Box
+        display="flex"
+        flexDirection={"column"}
+        alignItems="center"
+        justifyContent={"center"}
+        margin="auto"
+        marginTop={22.5}
+        marginRight={10}
       >
-    {/* <Stack
-      m={25}
-    > */}
-    <Typography 
-      variant="h6"
-      align="center"
-      component="h6"
-    >
-      TWADPMS
-    </Typography>
-    {/* <ThemeProvider theme={loginTheme}> */}
-      {/* <Grid 
-        container
-        columnSpacing={{ xs: 2, sm: 2, md: 2, lg: 2, xl: 2 }}
-  > */}
-      <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-        <Stack 
-          mt={2}
-          alignItems="center"
-          justifyContent="center"
+        <Typography variant="h4" sx={{ color: "#4DA8DB" }}>
+          TWADPMS
+        </Typography>
+        <Typography variant="h5" sx={{ mt: 2 }}>
+          At one place where you get all information about project
+        </Typography>
+      </Box>
+
+      {/* login form right side */}
+
+      <Box
+        className={LoginStyles.LoginForm}
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        display="flex"
+        flexDirection={"column"}
+        // maxWidth={400}
+        minWidth={400}
+        alignItems="center"
+        justifyContent={"center"}
+        margin="auto"
+        marginTop={15}
+        marginRight={20}
+        borderRadius={5}
+        boxShadow={"5px 5px 10px #ccc"}
+        sx={{
+          ":hover": {
+            boxShadow: "10px 10px 20px #ccc",
+          },
+        }}
+      >
+        <Box marginTop={2} component="img" alt="TWAD LOGO" src={twadimage} />
+        <Typography
+          variant="h6"
+          padding={3}
+          textAlign="center"
+          component="h6"
+          sx={{ color: "#4DA8DB" }}
         >
-        <Controller 
+          Welcome to TWADPMS
+        </Typography>
+        <Controller
           name="username"
           control={control}
           defaultValue=""
-          // autoComplete="off"
           rules={{ required: true }}
-          render={({ field: {...field}, fieldState: {error} }) => (
-            <TextField 
+          render={({ field: { ...field }, fieldState: { error } }) => (
+            <TextField
               {...field}
               label="Username or Email *"
+              // margin="normal"
+              marginTop={2}
+              type={"text"}
               variant="outlined"
               size="small"
-              // fullWidth
+              // autoComplete='new-password'
               error={error !== undefined}
               helperText={
-                error 
-                ? loginPageValidation.usernameEmailError[error.type] 
-                // || 
-                // loginPageValidation.usernamepasswordIncorrect[error.type]
-                : ""
+                error ? loginPageValidation.usernameEmailError[error.type] : ""
               }
-             />
+            />
           )}
         />
-        </Stack>
-      </Grid>
-      <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-        <Stack
-          mt={3}
-          alignItems="center"
-          justifyContent="center"
-        >
-        <Controller 
+        <Controller
           name="password"
           control={control}
           defaultValue=""
-          // autoComplete="off"
           rules={{ required: true }}
-          render={({ field: {...field}, fieldState: {error} }) => (
-            <TextField 
+          render={({ field: { ...field }, fieldState: { error } }) => (
+            <TextField
               {...field}
               label="Password *"
+              margin="normal"
+              type={"password"}
               variant="outlined"
               size="small"
-              // fullWidth
+              // autoComplete='new-password'
               error={error !== undefined}
               helperText={
-                error 
-                ? loginPageValidation.passwordError[error.type] 
-                : ""
+                error ? loginPageValidation.passwordError[error.type] : ""
               }
-             />
+            />
           )}
         />
-        </Stack>
-      </Grid>
-      {/* </ThemeProvider> */}
-      {/* <ThemeProvider theme={loginButton}> */}
-        <Stack
-          mt={4}
-          alignItems="center"
-          justifyContent="center"
-        >
-        <Button
-          variant="contained"
-          size="medium"
-          type="submit"
-        >
+        <Button variant="contained" sx={{ mt: 2 }} size="medium" type="submit">
           LOGIN
         </Button>
-      </Stack>
-    {/* </ThemeProvider> */}
-    {/* </Stack> */}
-  </Box>
-  )
+        <Link
+          component="button"
+          variant="body2"
+          sx={{ mt: 2 }}
+          style={{ textDecoration: "none" }}
+        >
+          Change Password?
+        </Link>
+      </Box>
+      {/* <Box
+        display="flex"
+        alignItems="center"
+        justifyContent={"center"}
+        marginBottom={2}
+      >
+        <Typography variant="body2" sx={{mb: 2}}>Developed by raavan tech</Typography>
+      </Box> */}
+    </div>
+  );
 }
 
 export default Login;

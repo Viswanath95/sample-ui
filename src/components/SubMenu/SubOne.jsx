@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from "@mui/material/Typography";
-import SubMenuStyles from '../styles/SubMenu.module.css';
+import SubMenuStyles from '../Styles/SubMenu.module.css';
 
 function SubOne() {
   return (

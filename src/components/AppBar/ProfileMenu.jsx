@@ -12,7 +12,6 @@ import { green } from "@mui/material/colors";
 import Button  from "@mui/material/Button";
 import PersonIcon from "@mui/icons-material/Person";
 import PasswordIcon from "@mui/icons-material/Password";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 
 export default function ProfileMenu() {
@@ -148,19 +147,6 @@ export default function ProfileMenu() {
             <PasswordIcon fontSize="small" />
           </ListItemIcon>
           Change password
-        </MenuItem>
-        <MenuItem
-          sx={{
-            "&:hover": {
-              backgroundColor: "#4DA8DB",
-              color: "#F8F8FF",
-            },
-          }}
-        >
-          <ListItemIcon sx={{ "&:hover": { color: "#F8F8FF" } }}>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
         </MenuItem>
         <MenuItem
           sx={{

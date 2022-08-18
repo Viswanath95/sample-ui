@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import SubMenuStyles from '../styles/SubMenu.module.css';
+import SubMenuStyles from '../Styles/SubMenu.module.css';
 
 function SubMenu() {
   return (
