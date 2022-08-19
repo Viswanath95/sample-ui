@@ -1,10 +1,10 @@
 .Login {
-    height: 97vh;
+    height: 99vh;
     width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color:#E5E4E2; /*#E6E6E6 #DCDCDC*/
+    background-color:#F7F7F7; /*#E6E6E6 #DCDCDC #E5E4E2*/
 }
 
 .LoginForm {

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import LoginStyles from "../Styles/Login.module.css";
 import twadimage from "../Images/twadlogo.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
-import { Box, Button, Link, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, Link, Paper, TextField, Typography } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const loginPageValidation = {
   usernameEmailError: {
@@ -25,8 +26,17 @@ function Login() {
       password: "",
     },
   });
+  const [values, setValues] = useState({showPassword: false});
 
   let navigate = useNavigate();
+
+  const handleClickShowPassword = () => {
+    setValues({...values, showPassword: !values.showPassword});
+  };
+
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault();
+  }
 
   const onSubmit = (submitted) => {
     console.log({ submitted });
@@ -38,7 +48,7 @@ function Login() {
       data: submitted,
     }).then(
       (response) => {
-        console.log(response.status);
+        console.log(response);
         sessionStorage.setItem(
           "Token",
           response.data.tokenType + " " + response.data.accessToken
@@ -70,7 +80,7 @@ function Login() {
         marginTop={22.5}
         marginRight={10}
       >
-        <Typography variant="h4" sx={{ color: "#4DA8DB" }}>
+        <Typography variant="h4" sx={{ color: "#4DA8DB" }} fontWeight="fontWeightBold">
           TWADPMS
         </Typography>
         <Typography variant="h5" sx={{ mt: 2 }}>
@@ -86,7 +96,6 @@ function Login() {
         onSubmit={handleSubmit(onSubmit)}
         display="flex"
         flexDirection={"column"}
-        // maxWidth={400}
         minWidth={400}
         alignItems="center"
         justifyContent={"center"}
@@ -120,12 +129,16 @@ function Login() {
             <TextField
               {...field}
               label="Username or Email *"
-              // margin="normal"
               marginTop={2}
               type={"text"}
+              InputProps={{
+                autoComplete: 'new-password',
+                form:{
+                  autoComplete: 'off'
+                }
+              }}
               variant="outlined"
               size="small"
-              // autoComplete='new-password'
               error={error !== undefined}
               helperText={
                 error ? loginPageValidation.usernameEmailError[error.type] : ""
@@ -140,13 +153,29 @@ function Login() {
           rules={{ required: true }}
           render={({ field: { ...field }, fieldState: { error } }) => (
             <TextField
+              sx={{width: '210px'}}
               {...field}
               label="Password *"
               margin="normal"
-              type={"password"}
+              type={values.showPassword? "text" : "password"}
+              InputProps={{
+                autoComplete: 'new-password',
+                form: {
+                  autoComplete: 'off'
+                },
+                endAdornment:(
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                    {values.showPassword? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
               variant="outlined"
               size="small"
-              // autoComplete='new-password'
               error={error !== undefined}
               helperText={
                 error ? loginPageValidation.passwordError[error.type] : ""
@@ -158,22 +187,32 @@ function Login() {
           LOGIN
         </Button>
         <Link
+          href="#"
           component="button"
           variant="body2"
-          sx={{ mt: 2 }}
-          style={{ textDecoration: "none" }}
+          sx={{ mt: 1}}
+          underline="hover"
         >
           Change Password?
         </Link>
       </Box>
-      {/* <Box
-        display="flex"
-        alignItems="center"
-        justifyContent={"center"}
-        marginBottom={2}
+      <Paper
+        component="footer"
+        sx={{
+          width: '100%',
+          position: 'fixed',
+          bottom: 0,
+        }}
       >
-        <Typography variant="body2" sx={{mb: 2}}>Developed by raavan tech</Typography>
-      </Box> */}
+      <Box
+        flexGrow={1}
+        display="flex"
+        justifyContent={"center"}
+        marginBottom={0}
+      >
+        <Typography variant="caption" sx={{color: '#808080'}}>Developed by raavan tech &copy; 2022</Typography>
+      </Box>
+      </Paper>
     </div>
   );
 }
