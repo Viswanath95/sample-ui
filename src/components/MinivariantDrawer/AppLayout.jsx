@@ -1,6 +1,28 @@
-import React, { useState } from "react";
+// import React from 'react';//prev
+// import { BrowserRouter as Router, useRoutes } from "react-router-dom";//prev
+// import Login from "./components/Login/Login";
+// import AppLayout from './components/MinivariantDrawer/AppLayout';
+
+// import UserManagement from './components/UserManagement/UserManagement';
+// import ContractorManagement from './components/ContractorManagement/ContractorManagement';
+// import SchemeCreation from './components/SchemeCreation/SchemeCreation';
+// import SubMenu from './components/SubMenu/SubMenu';
+// import SubOne from './components/SubMenu/SubOne';
+// import SubTwo from './components/SubMenu/SubTwo';
+// import SubThree from './components/SubMenu/SubThree';
+
+import UserManagement from '../UserManagement/UserManagement';
+import ContractorManagement from '../ContractorManagement/ContractorManagement';
+import SchemeCreation from '../SchemeCreation/SchemeCreation';
+import SubMenu from '../SubMenu/SubMenu';
+import SubOne from '../SubMenu/SubOne';
+import SubTwo from '../SubMenu/SubTwo';
+import SubThree from '../SubMenu/SubThree';
+
+import React, { useState } from "react";//New
 import { styled, useTheme } from "@mui/material/styles";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useRoutes, Outlet, useNavigate } from "react-router-dom";//prev working before checking login
+// import { Outlet, useNavigate } from "react-router-dom";//New
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
 import {
@@ -25,16 +47,12 @@ import {
   ExpandMore,
   ExpandLess,
 } from "@mui/icons-material";
-import ProfileMenu from "../AppBar/ProfileMenu";
-import { Menu } from "./Menu";
-import { hasChildren } from "./Utils";
-import UserManagement from "../UserManagement/UserManagement";
-// import ContractorManagement from "../ContractorManagement/ContractorManagement";
-// import SchemeCreation from "../SchemeCreation/SchemeCreation";
-// import SubMenu from "../SubMenu/SubMenu";
-// import SubOne from "../SubMenu/SubOne";
-// import SubTwo from "../SubMenu/SubTwo";
-// import SubThree from "../SubMenu/SubThree";
+import ProfileMenu from "../AppBar/ProfileMenu";//prev in AppLayout
+// import ProfileMenu from "../src/components/AppBar/ProfileMenu";
+import { Menu } from "./Menu";//prev in AppLayout
+// import { Menu } from "../src/components/MinivariantDrawer/Menu";
+import { hasChildren } from "./Utils";//prev in AppLayout
+// import { hasChildren } from "../src/components/MinivariantDrawer/Utils";
 
 const drawerWidth = 240;
 
@@ -103,7 +121,52 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function AppLayout() {
+
+export const AppRoutes = () =>  {
+  let routes= useRoutes([
+    { 
+      path: "/applayout", 
+      // element: <AppLayout/>,
+      children: [
+        {
+          path: "usermanagement",
+          element: <UserManagement />,
+
+        },
+        {
+          path: "contractormanagement",
+          element: <ContractorManagement />,
+        },
+        {
+          path: "schemecreation",
+          element: <SchemeCreation />,
+        },
+        {
+          path: "submenu",
+          element: <SubMenu/>,
+          children: [
+            { 
+              path: "submenuone", 
+              element: <SubOne/> 
+            },
+            { 
+              path: "submenutwo", 
+              element: <SubTwo/> 
+            },
+            { 
+              path: "submenuthree", 
+              element: <SubThree/>
+            }
+          ],
+        },
+      ],
+    },
+    
+  ]);
+  return routes;
+};
+
+const AppLayout = () => {
   const theme = useTheme();
   let navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -155,7 +218,6 @@ export default function AppLayout() {
       //  setsubmenuOpen((prev) => !prev);
       setsubmenuOpen(!submenuOpen);
     };
-
   return (
       <React.Fragment>
         <ListItem
@@ -193,103 +255,93 @@ export default function AppLayout() {
       </React.Fragment>
     );
   };
-
-  return (
+  return(
     <>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="fixed" open={open} sx={{ bgcolor: "#4682B4" }}>
-          <Toolbar>
-            <Tooltip title="Open Drawer" arrow>
+      {/* <Routes>
+            <Route exact path="/" element={<Login/>} />
+          </Routes> */}
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open} sx={{ bgcolor: "#4682B4" }}>
+        <Toolbar>
+          <Tooltip title="Open Drawer" arrow>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                ml: -1.5,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Tooltip>
+          <Box flexGrow={1} />
+          <Box mr={1}>
+            <Tooltip title="Notification" arrow>
               <IconButton
                 color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                  ml: -1.5,
-                  ...(open && { display: "none" }),
-                }}
+                aria-label="notification alert"
+                edge="end"
               >
-                <MenuIcon />
+                <NotificationsActive />
               </IconButton>
             </Tooltip>
-            <Box flexGrow={1} />
-            <Box mr={1}>
-              <Tooltip title="Notification" arrow>
-                <IconButton
-                  color="inherit"
-                  aria-label="notification alert"
-                  edge="end"
-                >
-                  <NotificationsActive />
-                </IconButton>
-              </Tooltip>
-            </Box>
-            <ProfileMenu />
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          open={open}
-          PaperProps={{
-            sx: {
-              backgroundColor: "#FFFAFA",
-              borderRadius: 5,
-              boxShadow: 4,
-              color: "black",
-            },
-          }}
-        >
-          <DrawerHeader>
-            <Typography variant="h6" sx={{ mr: 4 }}>
-              TWADPMS
-            </Typography>
-            <Tooltip title="Close Drawer" arrow>
-              <IconButton
-                onClick={handleDrawerClose}
-                sx={{
-                  "&:hover": { backgroundColor: "#4DA8DB", color: "#F8F8FF" },
-                }}
-              >
-                {theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
-              </IconButton>
-            </Tooltip>
-          </DrawerHeader>
-          {Menu.map((item, key) => (
-            <MenuItem key={key} item={item} />
-          ))}
-        </Drawer>
-        <Box component="main" m={-1} sx={{ p: 2 }}>
-          <DrawerHeader />
-          <Box component="content" sx={{ ml: open ? drawerWidth : 2 }}>
-            <Stack spacing={1}>
-           <Typography component="user">
-                <UserManagement />
-              </Typography>
-           {/*     <Typography component="contract">
-                <ContractorManagement />
-              </Typography>
-              <Typography component="scheme">
-                <SchemeCreation />
-              </Typography>
-              <Typography component="submenu">
-                <SubMenu />
-              </Typography>
-              <Typography component="subone">
-                <SubOne />
-              </Typography>
-              <Typography component="subtwo">
-                <SubTwo />
-              </Typography>
-              <Typography component="subthree">
-                <SubThree />
-              </Typography>  */}
-            </Stack>
           </Box>
+          <ProfileMenu />
+        </Toolbar>
+      </AppBar>
+      
+      <Drawer
+        variant="permanent"
+        open={open}
+        PaperProps={{
+          sx: {
+            backgroundColor: "#FFFAFA",
+            borderRadius: 5,
+            boxShadow: 4,
+            color: "black",
+          },
+        }}
+      >
+        <DrawerHeader>
+          <Typography variant="h6" sx={{ mr: 4 }}>
+            TWADPMS
+          </Typography>
+          <Tooltip title="Close Drawer" arrow>
+            <IconButton
+              onClick={handleDrawerClose}
+              sx={{
+                "&:hover": { backgroundColor: "#4DA8DB", color: "#F8F8FF" },
+              }}
+            >
+              {theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
+            </IconButton>
+          </Tooltip>
+        </DrawerHeader>
+        {Menu.map((item, key) => (
+          <MenuItem key={key} item={item} />
+        ))}
+      </Drawer>
+   
+      <Box component="main" m={-1} sx={{ p: 2 }}>
+        <DrawerHeader />
+        <Box component="content" sx={{ ml: open ? drawerWidth : 2 }}>
+          <Stack spacing={1}>
+        
+          <AppRoutes />
+          </Stack>
         </Box>
       </Box>
-      <Outlet />
-    </>
-  );
+    </Box>
+    <Outlet />
+  </>
+    // <Router>
+    //  <AppRoutes />
+    // </Router>
+  )
 }
+
+export default AppLayout;

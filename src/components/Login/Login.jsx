@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+// import AppLayout from "../MinivariantDrawer/AppLayout";
+// import App from "../../App";//New
+// import { BrowserRouter as Router, Routes } from "react-router-dom";//New
+// import validator from 'validator';
+// import { ErrorMessage } from '@hookform/error-message';
 import LoginStyles from "../Styles/Login.module.css";
 import twadimage from "../Images/twadlogo.jpg";
 import { useNavigate } from "react-router-dom";
@@ -13,9 +18,11 @@ const loginPageValidation = {
   },
   passwordError: {
     required: "Password is required",
-  },
-  usernamepasswordInvalid: {
-    required: "Please enter valid username and password",
+    // validate: "Strong Password",
+    // validate:{
+    //   strongPassword: "This is a strong password",
+    //   weakPassword: "Please enter a strong password"
+    // } 
   },
 };
 
@@ -25,8 +32,14 @@ function Login() {
       username: "",
       password: "",
     },
+    // criteriaMode: "all",
   });
   const [values, setValues] = useState({showPassword: false});
+  // const [authenticated, setAuthenticated] = useState(false);
+  // const [errorPassword, setErrorPassword] = useState('');
+
+  // var strongPassword = "";
+  // var weakPassword= "";
 
   let navigate = useNavigate();
 
@@ -36,7 +49,24 @@ function Login() {
 
   const handleMouseDownPassword = (e) => {
     e.preventDefault();
-  }
+  };
+
+  // const validatePassword = (value) => {
+  //   console.log({value});
+  //    if(validator.isStrongPassword(value, {
+  //     minLength: 9, minLowercase: 1,
+  //     minUppercase: 1, minNumbers: 1,
+  //     minSymbols: 1
+  //   })) {
+  //     // strongPassword = "This is a strong password";
+  //     return strongPassword; 
+  //     // setErrorPassword("This is a strong password");
+  //   }else {
+  //     // weakPassword = "Please enter strong password";
+  //     return weakPassword;
+  //     // setErrorPassword("Please enter a strong password");
+  //   } 
+  // }
 
   const onSubmit = (submitted) => {
     console.log({ submitted });
@@ -57,9 +87,22 @@ function Login() {
           response.data.accessToken === "" ||
           response.data.accessToken === null
         ) {
+          // setAuthenticated(false);
           navigate("/");
         } else {
+        //  <Router>
+        //   <Routes>
+        //     {/* <Route exact path="/applayout" element={<AppLayout/>} /> */}
+        //     <AppLayout />
+        //   </Routes>
+        //  </Router>
+          // setAuthenticated(true);
+          // (authenticated || navigate("/applayout")) &&  <App />;
           navigate("/applayout");
+          // <App />
+          
+          // authenticated && navigate("/applayout"); 
+          // authenticated && <App />;
         }
       },
       (error) => {
@@ -150,8 +193,13 @@ function Login() {
           name="password"
           control={control}
           defaultValue=""
-          rules={{ required: true }}
-          render={({ field: { ...field }, fieldState: { error } }) => (
+          rules={{ 
+            required: true,
+            // validate:(value) => 
+            //  validatePassword(value)
+            }}
+            // onChange={(e) =>validatePassword(e.target.value)}
+            render={({ field: { ...field }, fieldState: { error } }) => (
             <TextField
               sx={{width: '210px'}}
               {...field}
@@ -181,7 +229,8 @@ function Login() {
                 error ? loginPageValidation.passwordError[error.type] : ""
               }
             />
-          )}
+        )}
+          // {...errorPassword ? strongPassword : weakPassword}
         />
         <Button variant="contained" sx={{ mt: 2 }} size="medium" type="submit">
           LOGIN
