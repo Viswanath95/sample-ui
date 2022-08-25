@@ -1,20 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";//New
-import Login from "./components/Login/Login";//New
+import { BrowserRouter as Router } from "react-router-dom";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";//New
+// import Login from "./components/Login/Login";//New
 // import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// let token = sessionStorage.getItem('Token');
+
+// const timeout = setTimeout( () => <App/>, 10000);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
+ 
   <React.StrictMode>
-  <Router>
-    <Routes>
-      <Route exact path="/" element={<Login/>} />
-    </Routes>
-     <App />
-  </Router>
+    <Router>
+      <App />
+    {/* { !token === "" || !token === null ? <App /> : <Login />} */}
+      </Router>
   </React.StrictMode>
 );
 

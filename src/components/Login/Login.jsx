@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+// import { AppContext } from "../../App";
 // import AppLayout from "../MinivariantDrawer/AppLayout";
 // import App from "../../App";//New
-// import { BrowserRouter as Router, Routes } from "react-router-dom";//New
+// import { BrowserRouter as Router } from "react-router-dom";//New
 // import validator from 'validator';
 // import { ErrorMessage } from '@hookform/error-message';
 import LoginStyles from "../Styles/Login.module.css";
@@ -26,7 +27,10 @@ const loginPageValidation = {
   },
 };
 
-function Login() {
+function Login(props) {
+  console.log(props);
+  const { showApp } = props;
+ 
   const { control, handleSubmit } = useForm({
     defaultValues: {
       username: "",
@@ -35,6 +39,7 @@ function Login() {
     // criteriaMode: "all",
   });
   const [values, setValues] = useState({showPassword: false});
+  // const [showApp, setShowApp] = useState(false);
   // const [authenticated, setAuthenticated] = useState(false);
   // const [errorPassword, setErrorPassword] = useState('');
 
@@ -87,24 +92,14 @@ function Login() {
           response.data.accessToken === "" ||
           response.data.accessToken === null
         ) {
-          // setAuthenticated(false);
+          
           navigate("/");
         } else {
-        //  <Router>
-        //   <Routes>
-        //     {/* <Route exact path="/applayout" element={<AppLayout/>} /> */}
-        //     <AppLayout />
-        //   </Routes>
-        //  </Router>
-          // setAuthenticated(true);
-          // (authenticated || navigate("/applayout")) &&  <App />;
-          navigate("/applayout");
-          // <App />
-          
-          // authenticated && navigate("/applayout"); 
-          // authenticated && <App />;
-        }
-      },
+          // console.log(!showApp);
+          // {!showApp && navigate('/applayout')};
+          navigate('/applayout');
+      }
+    },
       (error) => {
         console.log(error);
       }
@@ -231,8 +226,10 @@ function Login() {
             />
         )}
           // {...errorPassword ? strongPassword : weakPassword}
+          // onClick={()=>showApp(false)}
         />
-        <Button variant="contained" sx={{ mt: 2 }} size="medium" type="submit">
+        <Button variant="contained" sx={{ mt: 2 }} size="medium" type="submit" 
+        onClick={()=>showApp(false)}>
           LOGIN
         </Button>
         <Link

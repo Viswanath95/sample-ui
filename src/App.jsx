@@ -12,7 +12,7 @@ import SubThree from './components/SubMenu/SubThree';
 
 import React, { useState } from "react";//New
 import { styled, useTheme } from "@mui/material/styles";
-import { useRoutes, Outlet, useNavigate } from "react-router-dom";//prev working before checking login
+import {useRoutes, Outlet, useNavigate } from "react-router-dom";//prev working before checking login
 // import { Outlet, useNavigate } from "react-router-dom";//New
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
@@ -44,6 +44,8 @@ import ProfileMenu from "../src/components/AppBar/ProfileMenu";
 import { Menu } from "../src/components/MinivariantDrawer/Menu";
 // import { hasChildren } from "./Utils";//prev in AppLayout
 import { hasChildren } from "../src/components/MinivariantDrawer/Utils";
+
+// export const AppContext = createContext(null);
 
 const drawerWidth = 240;
 
@@ -112,10 +114,9 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-
-export const AppRoutes = () =>  {
+const AppRoutes = () =>  {
   let routes= useRoutes([
-    { path: "/", element: <Login /> },
+    // { path: "/", element: <Login /> },
     { 
       path: "/applayout", 
       // element: <App/>,
@@ -162,6 +163,7 @@ const App = () => {
   const theme = useTheme();
   let navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [showApp, setShowApp] = useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -247,12 +249,11 @@ const App = () => {
       </React.Fragment>
     );
   };
+
   return(
     <>
-      {/* <Routes>
-            <Route exact path="/" element={<Login/>} />
-          </Routes> */}
-    <Box sx={{ display: "flex" }}>
+    {showApp && <Login showApp={setShowApp} />}
+    {!showApp && <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{ bgcolor: "#4682B4" }}>
         <Toolbar>
@@ -322,17 +323,16 @@ const App = () => {
         <DrawerHeader />
         <Box component="content" sx={{ ml: open ? drawerWidth : 2 }}>
           <Stack spacing={1}>
-        
+          
           <AppRoutes />
+          
           </Stack>
         </Box>
       </Box>
-    </Box>
-    <Outlet />
+    </Box>}
+    <Outlet /> 
+    
   </>
-    // <Router>
-    //  <AppRoutes />
-    // </Router>
   )
 }
 
